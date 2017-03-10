@@ -1,7 +1,7 @@
 
 include(../common.pri)
 
-QT += core network
+QT += core network xml
 QT -= gui
 
 TARGET = server
@@ -11,7 +11,8 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    tcpserver.cpp
+    tcpserver.cpp \
+    oneconnection.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -25,4 +26,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    tcpserver.h
+    tcpserver.h \
+    oneconnection.h
