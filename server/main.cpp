@@ -8,5 +8,6 @@ int main(int argc, char *argv[])
 
 	TcpServer server;
 	server.start();
+	
 	return a.exec();
 }

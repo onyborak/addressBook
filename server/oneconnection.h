@@ -27,6 +27,8 @@ private:
 	static QDomDocument mBook;
 
 	void sendBook();
+	void parseMessage(QDomNode &node);
+	void saveBook(QDomNode node);
 private slots:
 	void onReadyRead();
 

@@ -44,6 +44,35 @@ void OneConnection::onReadyRead()
 			   <<errorColumn<<"ошибка:"<<errorStr;
 		return;
 	}
+
+	QDomNode root = doc.firstChild();
+	parseMessage(root);
+}
+
+void OneConnection::parseMessage(QDomNode &node)
+{
+	if (node.toElement().tagName() != "type" || node.isNull())
+	{
+		qDebug()<<"Не верное сообщение!";
+		return;
+	}
+
+	if (node.toElement().attribute("command") == "get")
+	{
+		sendBook();
+	}
+	else if (node.toElement().attribute("command") == "set")
+	{
+		saveBook(node.firstChild());
+	}
+
+}
+
+void OneConnection::saveBook(QDomNode node)
+{
+	QMutexLocker locker(&mutex);
+	mBook = node.toDocument();
+
 }
 
 void OneConnection::sendBook()
