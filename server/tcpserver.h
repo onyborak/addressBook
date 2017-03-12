@@ -11,7 +11,7 @@ public:
 	bool start();
 
 protected:
-	void incomingConnection( qintptr handle ) override;
+	void incomingConnection( qintptr handle ) Q_DECL_OVERRIDE;
 };
 
 #endif // TCPSERVER_H

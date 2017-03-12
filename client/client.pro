@@ -26,6 +26,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        widget.cpp
+        widget.cpp \
+    addressbookmodel.cpp \
+    bookclient.cpp \
+    addressbookrow.cpp \
+    editdialog.cpp \
+    configdialog.cpp
 
-HEADERS  += widget.h
+HEADERS  += widget.h \
+    addressbookmodel.h \
+    bookclient.h \
+    addressbookrow.h \
+    editdialog.h \
+    configdialog.h
+
+FORMS += \
+    editdialog.ui \
+    configdialog.ui

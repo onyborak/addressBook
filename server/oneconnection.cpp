@@ -3,6 +3,7 @@
 
 #include <QTcpSocket>
 #include <QByteArray>
+#include <QThread>
 
 OneConnection::OneConnection(quintptr discriptor, QObject *parent)
 	: QObject(parent)
@@ -15,6 +16,7 @@ OneConnection::OneConnection(quintptr discriptor, QObject *parent)
 
 void OneConnection::start()
 {
+	qDebug()<<"К нам подключился новый клиент!";
 	connect(mSocket, &QTcpSocket::readyRead, this, &OneConnection::onReadyRead);
 	connect(mSocket, &QTcpSocket::disconnected, this, &OneConnection::connectingLost);
 }
@@ -41,13 +43,13 @@ void OneConnection::onReadyRead()
 		return;
 	}
 
-	QDomNode root = doc.firstChild();
-	parseMessage(root);
+	parseMessage(doc);
 }
 
-void OneConnection::parseMessage(QDomNode &node)
+void OneConnection::parseMessage(const QDomDocument &doc)
 {
-	if (node.toElement().tagName() != "type" || node.isNull())
+	QDomNode node = doc.firstChild();
+	if (node.toElement().tagName() != "Type" || node.isNull())
 	{
 		qDebug()<<"Не верное сообщение!";
 		return;
@@ -71,8 +73,10 @@ void OneConnection::saveBook(const QDomNode &node)
 
 void OneConnection::sendBook()
 {
-	QDomDocument book = Core::instance()->book().toDocument();
-	if (mSocket->write(book.toByteArray()) == -1)
+	QDomDocument book = Core::instance()->book();
+	mStream.startTransaction();
+	mStream << book.toByteArray();;
+	if (!mStream.commitTransaction())
 	{
 		qDebug()<<"Ошибка отправки адрессной книги!"<<mSocket->errorString();
 		return;

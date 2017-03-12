@@ -18,24 +18,24 @@ Core::Core()
 {
 	mFileName = QCoreApplication::applicationDirPath() + "/addressBook.xml";
 	QFile file(mFileName);
-	QDomDocument book;
 	if (file.open(QIODevice::ReadOnly))
 	{
 		QString errorMsg;
 		int line, column;
-		if (book.setContent(&file, &errorMsg, &line, &column))
+		if (mBook.setContent(&file, &errorMsg, &line, &column))
 		{
 			qDebug()<<"Файл с книгой успешно подгружен";
-			mBookRoot = book.firstChild();
 		}
 		else
 		{
 			qDebug()<<"Ошибка!"<<errorMsg<<"строчка -"<<line<<"столбец -"<<column;
+			mBook = QDomDocument("addressBook");
 		}
 		file.close();
 	}
 	else
 	{
+		mBook = QDomDocument("addressBook");
 		qDebug()<<"Не удалось открыть файл:"<<file.fileName()<<file.errorString();
 		qDebug()<<"Все хорошо, возможно ее пока никто из клиентов и не создавал, чтобы она тут уже \"лежала\"";
 	}
@@ -45,13 +45,9 @@ void Core::saveBook()
 {
 	QFile file(mFileName);
 	if(file.open(QIODevice::WriteOnly)) {
-		if (file.write(mBookRoot.toDocument().toByteArray()) == -1)
+		if (file.write(mBook.toByteArray()) == -1)
 		{
 			qDebug()<<"Ошибка записи в файл!"<<file.errorString();
-		}
-		else
-		{
-			qDebug()<<"Файл успешно записан!";
 		}
 		file.close();
 	}
@@ -61,20 +57,18 @@ void Core::saveBook()
 	}
 }
 
-QDomNode Core::book()
+QDomDocument Core::book()
 {
 	QMutexLocker locker(&mMutex);
-	return mBookRoot;
+	return mBook;
 }
 
 void Core::setBook(const QDomNode &value)
 {
-	if (value == mBookRoot)
-		return;
-
 	mMutex.lock();
-	mBookRoot = value;
+	mBook = QDomDocument("addressBook");
+	mBook.appendChild(value);
 	saveBook();
 	mMutex.unlock();
-	emit bookChanged(mBookRoot);
+	emit bookChanged(mBook);
 }

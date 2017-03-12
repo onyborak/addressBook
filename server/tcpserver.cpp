@@ -34,8 +34,13 @@ void TcpServer::incomingConnection(qintptr handle)
 	connection->moveToThread(thread);
 	connect(thread, &QThread::started, connection, &OneConnection::start);
 	connect(connection, &OneConnection::connectingLost, this, [=](){
+		qDebug()<<"Клиент отключился. Удаляем...";
 		thread->quit();
 		connection->deleteLater();
+	});
+	connect(thread, &QThread::finished, this, [=](){
+		delete thread;
+		qDebug()<<"Удалили";
 	});
 	thread->start();
 }

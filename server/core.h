@@ -2,7 +2,7 @@
 #define CORE_H
 
 #include <QObject>
-#include <QDomNode>
+#include <QDomDocument>
 #include <QMutex>
 
 class TcpServer;
@@ -13,11 +13,11 @@ class Core : public QObject
 public:
 	static Core *instance();
 
-	QDomNode book();
+	QDomDocument book();
 	void setBook(const QDomNode &value);
 
 signals:
-	void bookChanged(QDomNode book);
+	void bookChanged(const QDomDocument &book);
 
 public slots:
 
@@ -26,7 +26,7 @@ private:
 	void saveBook();
 
 	static Core *mSelf;
-	QDomNode mBookRoot;
+	QDomDocument mBook;
 	QMutex mMutex;
 	QString mFileName;
 };

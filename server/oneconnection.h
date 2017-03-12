@@ -7,6 +7,7 @@
 
 class QTcpSocket;
 class QDomNode;
+class QDomDocument;
 
 class OneConnection : public QObject
 {
@@ -25,7 +26,7 @@ private:
 	QDataStream mStream;
 
 	void sendBook();
-	void parseMessage(QDomNode &node);
+	void parseMessage(const QDomDocument &doc);
 	void saveBook(const QDomNode &node);
 private slots:
 	void onReadyRead();
