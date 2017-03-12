@@ -4,6 +4,7 @@
 
 #include <QCoreApplication>
 #include <QThread>
+#include <iostream>
 
 TcpServer::TcpServer(QObject *parent)
 	: QTcpServer(parent)
@@ -11,30 +12,19 @@ TcpServer::TcpServer(QObject *parent)
 
 }
 
-void TcpServer::start()
+bool TcpServer::start()
 {
-	QStringList args = QCoreApplication::arguments();
-	if (args.size() != 1)
-	{
-		qDebug()<<"Укажите корректные параметры командной строки";
-		return;
-	}
-
-	bool ok;
-	int port = args.first().toInt(&ok);
-	if (!ok)
-	{
-		qDebug()<<"Задан не корректный порт";
-		return;
-	}
+	int port;
+	qDebug()<<"Введите порт сервера";
+	std::cin >> port;
 	if (listen(QHostAddress::Any, port))
 	{
 		qDebug()<<"Сервер успешно запущен";
+		return true;
 	}
-	else
-	{
-		qDebug()<<"Ошибка запуска сервера."<<errorString();
-	}
+
+	qDebug()<<"Ошибка запуска сервера."<<errorString();
+	return false;
 }
 
 void TcpServer::incomingConnection(qintptr handle)

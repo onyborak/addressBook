@@ -4,10 +4,9 @@
 #include <QObject>
 #include <QDataStream>
 
-#include <QDomDocument>
-
 
 class QTcpSocket;
+class QDomNode;
 
 class OneConnection : public QObject
 {
@@ -24,11 +23,10 @@ signals:
 private:
 	QTcpSocket *mSocket;
 	QDataStream mStream;
-	static QDomDocument mBook;
 
 	void sendBook();
 	void parseMessage(QDomNode &node);
-	void saveBook(QDomNode node);
+	void saveBook(const QDomNode &node);
 private slots:
 	void onReadyRead();
 

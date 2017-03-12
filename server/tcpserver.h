@@ -8,7 +8,7 @@ class TcpServer : public QTcpServer
 	Q_OBJECT
 public:
 	TcpServer(QObject *parent = nullptr);
-	void start();
+	bool start();
 
 protected:
 	void incomingConnection( qintptr handle ) override;

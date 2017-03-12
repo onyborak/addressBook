@@ -1,12 +1,8 @@
 #include "oneconnection.h"
+#include "core.h"
 
 #include <QTcpSocket>
 #include <QByteArray>
-#include <QMutex>
-
-QDomDocument OneConnection::mBook;
-
-QMutex mutex;
 
 OneConnection::OneConnection(quintptr discriptor, QObject *parent)
 	: QObject(parent)
@@ -68,17 +64,15 @@ void OneConnection::parseMessage(QDomNode &node)
 
 }
 
-void OneConnection::saveBook(QDomNode node)
+void OneConnection::saveBook(const QDomNode &node)
 {
-	QMutexLocker locker(&mutex);
-	mBook = node.toDocument();
-
+	Core::instance()->setBook(node);
 }
 
 void OneConnection::sendBook()
 {
-	QMutexLocker locker(&mutex);
-	if (mSocket->write(mBook.toByteArray()) == -1)
+	QDomDocument book = Core::instance()->book().toDocument();
+	if (mSocket->write(book.toByteArray()) == -1)
 	{
 		qDebug()<<"Ошибка отправки адрессной книги!"<<mSocket->errorString();
 		return;
