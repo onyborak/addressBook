@@ -1,5 +1,5 @@
 #include "oneconnection.h"
-#include "core.h"
+#include "addressbook.h"
 
 #include <QTcpSocket>
 #include <QByteArray>
@@ -68,12 +68,12 @@ void OneConnection::parseMessage(const QDomDocument &doc)
 
 void OneConnection::saveBook(const QDomNode &node)
 {
-	Core::instance()->setBook(node);
+	AddressBook::instance()->setBook(node);
 }
 
 void OneConnection::sendBook()
 {
-	QDomDocument book = Core::instance()->book();
+	QDomDocument book = AddressBook::instance()->book();
 	mStream.startTransaction();
 	mStream << book.toByteArray();;
 	if (!mStream.commitTransaction())

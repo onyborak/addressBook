@@ -1,5 +1,5 @@
-#ifndef CORE_H
-#define CORE_H
+#ifndef ADDRESSBOOK_H
+#define ADDRESSBOOK_H
 
 #include <QObject>
 #include <QDomDocument>
@@ -7,11 +7,11 @@
 
 class TcpServer;
 
-class Core : public QObject
+class AddressBook : public QObject
 {
 	Q_OBJECT
 public:
-	static Core *instance();
+	static AddressBook *instance();
 
 	QDomDocument book();
 	void setBook(const QDomNode &value);
@@ -22,13 +22,13 @@ signals:
 public slots:
 
 private:
-	Core();
+	AddressBook();
 	void saveBook();
 
-	static Core *mSelf;
+	static AddressBook *mSelf;
 	QDomDocument mBook;
 	QMutex mMutex;
 	QString mFileName;
 };
 
-#endif // CORE_H
+#endif // ADDRESSBOOK_H

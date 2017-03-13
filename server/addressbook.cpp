@@ -1,20 +1,20 @@
-#include "core.h"
+#include "addressbook.h"
 #include <QFile>
 #include <QCoreApplication>
 #include <QDebug>
 
-Core *Core::mSelf = 0;
+AddressBook *AddressBook::mSelf = 0;
 
-Core *Core::instance()
+AddressBook *AddressBook::instance()
 {
 	if (!mSelf)
 	{
-		mSelf = new Core;
+		mSelf = new AddressBook;
 	}
 	return mSelf;
 }
 
-Core::Core()
+AddressBook::AddressBook()
 {
 	mFileName = QCoreApplication::applicationDirPath() + "/addressBook.xml";
 	QFile file(mFileName);
@@ -41,7 +41,7 @@ Core::Core()
 	}
 }
 
-void Core::saveBook()
+void AddressBook::saveBook()
 {
 	QFile file(mFileName);
 	if(file.open(QIODevice::WriteOnly)) {
@@ -57,13 +57,13 @@ void Core::saveBook()
 	}
 }
 
-QDomDocument Core::book()
+QDomDocument AddressBook::book()
 {
 	QMutexLocker locker(&mMutex);
 	return mBook;
 }
 
-void Core::setBook(const QDomNode &value)
+void AddressBook::setBook(const QDomNode &value)
 {
 	mMutex.lock();
 	mBook = QDomDocument("addressBook");

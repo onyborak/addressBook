@@ -2,7 +2,7 @@
 #include <QTextCodec>
 
 #include "tcpserver.h"
-#include "core.h"
+#include "addressbook.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 		QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 #endif
 
-	Core::instance();
+	AddressBook::instance();
 	TcpServer server;
 	server.start();
 	
