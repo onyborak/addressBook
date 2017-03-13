@@ -1,5 +1,7 @@
 #include "bookclient.h"
 
+#include <QFile>
+
 BookClient::BookClient(QObject *parent)
 	: QObject(parent)
 {
@@ -37,7 +39,9 @@ void BookClient::sendBook(const QList<AddressBookRow> &book)
 
 	foreach (AddressBookRow row, book)
 	{
-		elem.appendChild(row.node());
+		QDomElement node = doc.createElement("Line");
+		row.setNode(node);
+		elem.appendChild(node);
 	}
 
 	mStream.startTransaction();
@@ -74,14 +78,14 @@ void BookClient::onReadyRead()
 		return;
 	}
 
-	QDomNode node = doc.firstChild();
-	if (node.toElement().tagName() != "Book")
+	QDomNode root = doc.firstChild();
+	if (root.toElement().tagName() != "Book")
 	{
 		emit clientError("Не правильный формат принятого сообшения");
 		return;
 	}
 
-	node = node.firstChild();
+	QDomNode node = root.firstChild();
 	QList<AddressBookRow> adrBook;
 	while (!node.isNull())
 	{

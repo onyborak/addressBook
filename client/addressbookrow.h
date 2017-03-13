@@ -25,7 +25,7 @@ public:
 	QString phoneNumber() const;
 	void setPhoneNumber(const QString &value);
 
-	QDomNode node() const;
+	void setNode(QDomNode &node);
 
 private:
 	QString mName;
@@ -33,8 +33,6 @@ private:
 	QString mMiddleName;
 	QString mSex;
 	QString mPhoneNumber;
-
-	QDomNode mNode;
 };
 
 #endif // ADDRESSBOOKROW_H

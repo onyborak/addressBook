@@ -1,13 +1,11 @@
 #include "addressbookrow.h"
 
+
 AddressBookRow::AddressBookRow()
 {
-	QDomDocument doc("addressBook");
-	mNode = doc.createElement("Line");
 }
 
 AddressBookRow::AddressBookRow(QDomNode node)
-	: mNode(node)
 {
 	QDomElement element = node.toElement();
 	mName = element.attribute("name");
@@ -24,7 +22,6 @@ QString AddressBookRow::name() const
 
 void AddressBookRow::setName(const QString &value)
 {
-	mNode.toElement().setAttribute("name", value);
 	mName = value;
 }
 
@@ -35,7 +32,7 @@ QString AddressBookRow::surname() const
 
 void AddressBookRow::setSurname(const QString &value)
 {
-	mNode.toElement().setAttribute("surname", value);
+
 	mSurname = value;
 }
 
@@ -46,7 +43,7 @@ QString AddressBookRow::middleName() const
 
 void AddressBookRow::setMiddleName(const QString &value)
 {
-	mNode.toElement().setAttribute("middle_name", value);
+
 	mMiddleName = value;
 }
 
@@ -57,7 +54,6 @@ QString AddressBookRow::sex() const
 
 void AddressBookRow::setSex(const QString &value)
 {
-	mNode.toElement().setAttribute("sex", value);
 	mSex = value;
 }
 
@@ -68,11 +64,14 @@ QString AddressBookRow::phoneNumber() const
 
 void AddressBookRow::setPhoneNumber(const QString &value)
 {
-	mNode.toElement().setAttribute("phone_number", value);
 	mPhoneNumber = value;
 }
 
-QDomNode AddressBookRow::node() const
+void AddressBookRow::setNode(QDomNode &node)
 {
-	return mNode;
+	node.toElement().setAttribute("name", mName);
+	node.toElement().setAttribute("surname", mSurname);
+	node.toElement().setAttribute("middle_name", mMiddleName);
+	node.toElement().setAttribute("sex", mSex);
+	node.toElement().setAttribute("phone_number", mPhoneNumber);
 }
